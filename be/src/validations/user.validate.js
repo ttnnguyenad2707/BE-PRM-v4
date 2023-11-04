@@ -32,7 +32,10 @@ module.exports = {
             phone: Joi.number()
                 .allow('', null)
                 .min(10),
-
+                avatar: Joi.string()
+                .not(null)
+                .only()
+                .required(),
             // password: Joi.string()
             //     .min(8)
             //     .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$')) // Mật khẩu phải chứa ít nhất một chữ cái thường, một chữ cái hoa và một số

@@ -87,7 +87,7 @@ const Posted = () => {
 
                                 <div className='user-box d-flex align-items-center gap-3'>
                                     <div className='avatar' >
-                                        <img src={images.avatarDefault} alt='avatar' height="80px" />
+                                        <img src={user.avatar == null ? images.avatarDefault : user.avatar} alt='avatar' height="80px" />
                                     </div>
                                     <div className='user-link d-flex flex-column gap-2'>
                                         <div className='username'>{user.firstname}</div>

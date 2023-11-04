@@ -1,6 +1,7 @@
 // @ts-ignore
 const Post = require('../models/post.model');
 const User = require('../models/user.model');
+const Comment = require('../models/comment.model');
 
 
 class PostService {
@@ -111,7 +112,27 @@ class PostService {
             .populate('security')
             .populate('utils')
             .populate('interiors')
-            .populate('owner');
+            .populate([
+                {
+                    path: 'owner',
+                    select : '_id firstname lastname email'
+                },{
+                path: 'comment',
+                options: { sort: { createdAt: -1 } },
+                populate: [
+                    {
+                        path: 'user',
+                        select: 'firstname lastname email'
+                    },
+                    {
+                        path: 'reply',
+                        populate: {
+                            path: 'user',
+                            select: 'firstname lastname email'
+                        }
+                    }
+                ]
+            }]);
         return res.status(200).json(result);
     }
 
@@ -151,6 +172,7 @@ class PostService {
                 .populate('utils')
                 .populate('interiors')
                 .populate('owner');
+                
             return res.status(200).json(results)
         } catch (error) {
             return res.status(500).json(error.message)
@@ -219,12 +241,36 @@ class PostService {
         try {
             const { slug } = req.params;
             const PostDetails = await Post.findOne({ slug: slug });
-            return res.status(200).json(PostDetails);
+            return res.status(200).json({
+                message: "Get post details successfully",
+                data: await PostDetails.populate([
+                    {
+                        path: 'owner',
+                        select : '_id firstname lastname email'
+                    },{
+                    path: 'comment',
+                    options: { sort: { createdAt: -1 } },
+                    populate: [
+                        {
+                            path: 'user',
+                            select: 'firstname lastname email'
+                        },
+                        {
+                            path: 'reply',
+                            populate: {
+                                path: 'user',
+                                select: 'firstname lastname email'
+                            }
+                        }
+                    ]
+                }])
+            });
         } catch (error) {
             return res.status(500).json({ Error: error.toString() })
         }
 
     }
+
 
     async getSearchValue(req, res) {
         const searchParam = req.params.searchParam;
@@ -420,6 +466,112 @@ class PostService {
             return res.status(500).json({ error: error.toString() });
         }
     }
+
+    async getCommentOfPost(req, res) {
+        try {
+            const { postId } = req.params;
+            const existPost = await Post.findById(postId);
+            if (!existPost) {
+                return res.status(500).json({ message: "Post is not exist" });
+            }
+            else {
+                return res.status(200).json({
+                    message: "Get Comment Successfully",
+                    data: (await existPost.populate('comment')).comment
+                })
+            }
+        } catch (error) {
+            return res.status(500).json({ error: error.toString() });
+
+        }
+    }
+    async addCommentToPost(req, res) {
+        try {
+            const { postId } = req.params;
+            const existPost = await Post.findById(postId);
+            if (!existPost) {
+                return res.status(500).json({ message: "Post is not exist" });
+            }
+            else {
+                const { content } = req.body;
+                const comment = await Comment.create({ user: req.user.id, content });
+                existPost.comment.push(comment._id);
+                existPost.save();
+                return res.status(201).json({
+                    message: "Comment create successfully",
+                    data: await comment.populate({
+                        path: 'user',
+                        select: 'firstname lastname email'
+                    })
+                })
+            }
+
+        } catch (error) {
+            return res.status(500).json({ error: error.toString() });
+
+        }
+    }
+    async replyComment(req, res) {
+        try {
+            const { commentId } = req.params;
+            const existComment = await Comment.findById(commentId);
+            if (!existComment) {
+                return res.status(500).json({ message: "Comment does not exist" });
+            } else {
+                const { content } = req.body;
+                existComment.reply.push({ content, user: req.user.id });
+                existComment.save();
+    
+                await existComment.populate({
+                    path: "reply.user",
+                    select: "firstname lastname email"
+                })
+    
+                const newReply = existComment.reply[existComment.reply.length - 1]; // Lấy câu trả lời cuối cùng trong mảng
+    
+                return res.status(201).json({
+                    message: "Reply comment successfully",
+                    data: newReply
+                });
+            }
+        } catch (error) {
+            return res.status(500).json({ error: error.toString() });
+        }
+    }
+
+    async likeComment(req,res){
+        try {
+            const userId = req.user.id;
+            const {commentId} = req.body;
+            const comment = await Comment.findById(commentId);
+            if (!comment){
+                return res.status(500).json({message:"Comment not found"})
+            }
+            else{
+                const userLiked = comment.likes?.some((like) => like.user.toString() === userId);
+                if (userLiked){
+                    const likeIndex = comment.likes.findIndex((like) => like.user.toString() === userId);
+                    comment.likes.splice(likeIndex, 1);
+                    comment.like -= 1;
+                    await comment.save();
+                    return res.status(200).json({message: "DisLike!!!",action:'dislike'});
+                    
+                }else{
+                    comment.likes.push({user:userId});
+                    comment.like += 1;
+                    await comment.save();
+                    return res.status(200).json({
+                        message: "Like!!!",
+                        action: 'like'
+                    })
+                }
+            }
+        } catch (error) {
+            return res.status(500).json({ error: error.toString() });
+            
+        }
+    }
+
 }
 
 module.exports = new PostService();

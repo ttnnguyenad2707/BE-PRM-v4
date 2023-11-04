@@ -39,6 +39,10 @@ const User = new mongoose.Schema({
         type: Number,
         minlength: 10,
 
+    },
+    avatar: {
+        type: String,
+        default: null,
     }
 }, { timestamps: true });
 module.exports = mongoose.model("User", User);

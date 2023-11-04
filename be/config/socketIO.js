@@ -24,5 +24,25 @@ module.exports = (server) => {
         socket.to(sendUserSocket).emit("msg-recieve", data.msg);
       }
     });
+
+    socket.on('comment', (comment) => {
+      // Lưu comment vào cơ sở dữ liệu
+      // Gửi sự kiện comment mới tới tất cả các kết nối
+      io.emit('newComment', comment);
+    });
+
+    socket.on('reply',(reply) => {
+      io.emit('newReply', reply);
+
+    })
+    socket.on('like',(like) => {
+      io.emit('newLike',like)
+    })
+    socket.on('disconnect', () => {
+      console.log('A user disconnected');
+    });
+   
   });
+
+
 }

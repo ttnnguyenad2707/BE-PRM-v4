@@ -96,4 +96,17 @@ module.exports = {
     RemovefavoritePost: asyncHandler(async (req, res) => {
         const user = await PostService.removeFavoritePost(req, res);
     }),
+    addCommentToPost: asyncHandler(async (req, res) => {
+        await PostService.addCommentToPost(req, res);
+    }),
+    replyComment: asyncHandler(async (req, res) => {
+        await PostService.replyComment(req, res);
+    }),
+    getCommentOfPost: asyncHandler(async (req, res) => {
+        await PostService.getCommentOfPost(req, res);
+    }),
+    likeComment: asyncHandler(async (req, res) => {
+        await PostService.likeComment(req, res);
+    }),
+
 };
