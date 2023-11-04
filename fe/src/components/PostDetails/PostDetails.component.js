@@ -9,7 +9,13 @@ import moment from 'moment';
 import Map from '../Map/Map.component'
 import Slider from 'react-slick'
 import MapContainer from './MapContainer.component'
-
+function formatCurrency(number) {
+    return number.toLocaleString('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+      minimumFractionDigits: 0,
+    });
+  }
 const PostDetails = () => {
     const navigate = useNavigate();
     const { slug } = useParams();
@@ -88,8 +94,8 @@ const PostDetails = () => {
                                 <div className='post-slide'>
                                     <Slider {...settings}>
                                         {postDetail?.images?.map(image => (
-                                            <div style={{ height: '700px' }}>
-                                                <img src={image.url} alt='post-image' width="100%" height="100%" />
+                                            <div style={{ height: '300px' ,width:'200px'}}>
+                                                <img src={image.url} alt='post-image' width="100%" height="700px" />
                                             </div>
                                         ))}
                                     </Slider>
@@ -99,7 +105,7 @@ const PostDetails = () => {
                                 </div>
                                 <div className='post-info'>
                                     <h4 className='title'>{postDetail.title}</h4>
-                                    <div className='price'> {postDetail.price} triệu đồng / tháng  <span>{postDetail.area}m2</span> </div>
+                                    <div className='price'> {formatCurrency(postDetail.price)} triệu đồng / tháng  <span>{postDetail.area}m2</span> </div>
                                     <div className='d-flex gap-3'>
                                         <span> <GlobalOutlined /> {postDetail.address}</span>
                                         <span> Đăng ngày : {moment(new Date(postDetail.createdAt)).format('DD/MM/YYYY')} </span>
@@ -116,7 +122,7 @@ const PostDetails = () => {
                                             </ul>
                                             <ul>
                                                 <li>Tiện ích khác : {postDetail.utils?.map(utils => (<span>{utils.name}, </span>))}</li>
-                                                <li>Tiền cọc : {postDetail.deposit} vnd</li>
+                                                <li>Tiền cọc : {formatCurrency(postDetail.deposit)} vnd</li>
                                                 <li>Số người tối đa : {postDetail.maxPeople} người</li>
                                             </ul>
 
