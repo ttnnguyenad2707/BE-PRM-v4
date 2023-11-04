@@ -2,7 +2,8 @@ import Footer from "../components/Footer/Footer.js";
 import Searchresult from "../components/Bodysearch/Bodysearch.js";
 import { useLocation,useOutletContext } from 'react-router-dom';
 import { useEffect, useState } from "react";
-import { searchPost,getPostfilter,getAllPost,addPostfavourite,removePostfavourite,getAll } from "../services/post.service.js";
+import { searchPost,getPostfilter,getAllPost,getAll } from "../services/post.service.js";
+import { deleteOnInFavorites,addFavorite  } from "../services/user.service.js";
 const SearchResultpage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [data, setData] = useState();
@@ -34,15 +35,18 @@ const SearchResultpage = () => {
     }
 
     const getDatafilter = async () => {
-        const address = category[0].address.map(addressItem => addressItem);
-        const area = category[3].area.map(d => d);
-        const price = category[1].price.map(d => d);
-        const utils = category[2].amenities.map(d => d);
-
-        console.log(address,area,price,utils);
+        const address = category[0].address
+        const area = category[4].area
+        const price_min = category[1].price_min
+        const price_max = category[2].price_max
+        const utils = category[3].amenities
+        const search = category[5].searchValue;
+        console.log(category);
+        console.log(address,area,price_min,price_max,utils);
         try {
-            const posts = (await getPostfilter(address,area,price,utils,currentPage)).data.data;
-            setData(posts);
+            const posts = (await getAll(currentPage,search,address,area,price_min,price_max,utils));
+            console.log(posts);
+            setData(posts.data.posts);
         } catch (error) {
 
         }
@@ -50,23 +54,24 @@ const SearchResultpage = () => {
 
     const getData = async () => {
         try {
-            const posts = (await getAllPost(currentPage)).data;
-            setData(posts.data);
-            setTotalPages(posts.totalPages)
+            const posts = await getAll(currentPage);
+            console.log(posts);
+            setData(posts.data.posts);
+            setTotalPages(posts.data.totalPages)
         } catch (error) {
         }
     }
 
     const addPostfavourites = async (userId, idPost) => {
         try {
-            const posts = (await addPostfavourite(userId, idPost));
+            const posts = (await addFavorite(idPost, userId));
         } catch (error) {
             
         }
     }
     const removePostfavourites = async (userId, idPost) => {
         try {
-            const posts = (await removePostfavourite(userId, idPost));
+            const posts = (await deleteOnInFavorites(idPost, userId));
         } catch (error) {
             
         }

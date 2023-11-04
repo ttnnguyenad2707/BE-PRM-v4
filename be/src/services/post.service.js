@@ -23,7 +23,8 @@ class PostService {
 
     async getAll(req, res) {
         let { page, search, address, area, minPrice, maxPrice, utils } = req.query;
-        const limit = 5;
+        console.log(page, search, address, area, minPrice, maxPrice, utils);
+        const limit = 10;
 
         page = page ? parseInt(page) : 1;
         search = search ? search : '';

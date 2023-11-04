@@ -13,7 +13,7 @@ const Searchresult = ({ dataSource, currentPage, setCurrentPage, checkNext, chec
     const numberPages = totalPages;
     let favoritePosts;
     if (user != null) {
-        favoritePosts = user.favoritePost;
+        favoritePosts = user.favorites;
     }
     for (let i = 1; i <= numberPages; i++) {
         number.push(i);
@@ -40,14 +40,13 @@ const Searchresult = ({ dataSource, currentPage, setCurrentPage, checkNext, chec
     const handleDetails = (slug) => {
         navigate(`/post/${slug}`)
     }
-    console.log(data);
     return (
         <>
             {data?.map((m) => {
                 return (
                     <div className='Bodysearch d-flex flex-column gap-3'>
                         <div className='Card_search d-flex gap-4'>
-                            <img src={m.images[0]} className='image-card' />
+                            <img src={m.images[0].url} className='image-card' />
                             <div className='d-flex flex-column gap-4'>
                                 <h5 onClick={() => handleDetails(m.slug)}>{m.title}</h5>
                                 <p>

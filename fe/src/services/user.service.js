@@ -87,18 +87,18 @@ export const getUser = async (id) => {
         }
     })
 }
-export const addFavorite = async (id) => {
+export const addFavorite = async (id,owner) => {
     const token = Cookies.get('accessToken');
-    return await axios.put(`${URL_SERVER}/user/favorites/${id}`,{
+    return await axios.put(`${URL_SERVER}/user/favorites/${id}`,{owner},{
         withCredentials: true,
         headers: {
             token: `Bearer ${token}`,
         }
     })
 }
-export const deleteOnInFavorites = async (id) => {
+export const deleteOnInFavorites = async (id,owner) => {
     const token = Cookies.get('accessToken');
-    return await axios.put(`${URL_SERVER}/user/favorites/rm/${id}`,{
+    return await axios.put(`${URL_SERVER}/user/favorites/rm/${id}`,{owner},{
         withCredentials: true,
         headers: {
             token: `Bearer ${token}`,
