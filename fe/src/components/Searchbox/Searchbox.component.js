@@ -3,15 +3,17 @@ import { Button, Modal, Tooltip, Input, Space, Select, TreeSelect } from 'antd';
 import { SearchOutlined, CaretDownOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 // import { useNavigate } from 'react-router-dom';
-const Searchbox = ({datalocation}) => {
-  const [open, setOpen] = useState(false);
+const Searchbox = ({ datalocation }) => {
+  const [open,setOpen] = useState(false)
+  const [location , setLocation] = useState();
+  const [price_min, setPriceMin] = useState();
+  const [price_max, setPriceMax] = useState();
+  const [area, setArea] = useState();
+  const [amenities, setAmenities] = useState();
+  const [search, setSearch] = useState();
   const [confirmLoading, setConfirmLoading] = useState(false);
   const locations = datalocation;
   const navigate = useNavigate();
-  const location = [];
-  const price = [];
-  const area= [];
-  const amenities = [];
   const [modalText, setModalText] = useState('Content of the modal');
   const { Search } = Input;
   const onSearch = (value, _e, info) => {
@@ -37,9 +39,16 @@ const Searchbox = ({datalocation}) => {
     { value: '40', label: '40' },
     { value: '50', label: '50' }
   ];
-  const optionsPrice = [
-    { value: '1000000-3000000', label: '1000000-3000000' },
-    { value: '3000000-5000000', label: '3000000-5000000' }
+  const optionsPricemin = [
+    { value: '1000000', label: '1000000' },
+    { value: '2000000', label: '2000000' },
+    { value: '3000000', label: '3000000' },
+  ];
+
+  const optionsPricemax = [
+    { value: '4000000', label: '4000000' },
+    { value: '5000000', label: '5000000' },
+    { value: '6000000', label: '6000000' },
   ];
 
   const optionsUtilities = [
@@ -50,25 +59,32 @@ const Searchbox = ({datalocation}) => {
   ];
   const handleChange_location = (value) => {
     console.log(`selected ${value}`);
-    location.push(value);
+    setLocation(value);
   };
 
-  const handleChange_price = (value) => {
+  const handleChange_price_min = (value) => {
     console.log(`selected ${value}`);
-    price.push(value);
+    setPriceMin(value);
   };
-
+  const handleChange_price_max = (value) => {
+    console.log(`selected ${value}`);
+    setPriceMax(value);
+  };
   const handleChange_area = (value) => {
     console.log(`selected ${value}`);
-    area.push(value);
+    setArea(value);
   };
 
   const handleChange_amenities = (value) => {
     console.log(`selected ${value}`);
-    amenities.push(value);
+    setAmenities(value);
   };
+  const handleChangeInput = (e) => {
+    searchResult = e.target.value;
+    setSearch(searchResult);
+  }
   const handleOk = () => {
-    let category = [{address: location}, {price: price}, {amenities: amenities},{area: area}];
+    let category = [{ address: location }, { price_min: price_min },{ price_max: price_max }, { amenities: amenities }, { area: area },{searchValue: search}];
     console.log(category);
     setModalText('The modal will be closed after two seconds');
     setConfirmLoading(true);
@@ -82,9 +98,6 @@ const Searchbox = ({datalocation}) => {
     console.log('Clicked cancel button');
     setOpen(false);
   };
-  const handleChangeInput = (e) => {
-    searchResult = e.target.value;
-  }
   return (
     <>
       <Tooltip title="search">
@@ -143,15 +156,28 @@ const Searchbox = ({datalocation}) => {
               style={{
                 width: '50%',
               }}
-              placeholder="Giá Tiền"
-              onSelect={handleChange_price}
-              options={optionsPrice}
+              placeholder="Giá Tiền Thấp Nhất"
+              onSelect={handleChange_price_min}
+              options={optionsPricemin}
             />
+            /
             <Select
               mode="multiple"
               allowClear
               style={{
                 width: '50%',
+              }}
+              placeholder="Giá Tiền Cao Nhất"
+              onSelect={handleChange_price_max}
+              options={optionsPricemax}
+            />
+          </div>
+          <div className='select-option d-flex column-gap-2'>
+            <Select
+              mode="multiple"
+              allowClear
+              style={{
+                width: '100%',
               }}
               placeholder="Tiện Ích"
               onSelect={handleChange_amenities}

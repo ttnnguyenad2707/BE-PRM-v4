@@ -46,7 +46,7 @@ const Landingpage = () => {
     // }
     const getData = async () => {
         try {
-          const response = await getAll();
+          const response = await getAll(1);
           if (response.status === 200) {
             setData(response.data.posts);
           } else {
@@ -60,7 +60,7 @@ const Landingpage = () => {
         getData();
     }, []);
       
-
+     console.log(data);
     return (
         <>
         {isLoading == true && (<><div className="unset-slick-dots-li-button-before">

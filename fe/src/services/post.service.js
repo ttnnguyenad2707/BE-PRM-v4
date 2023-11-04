@@ -3,15 +3,24 @@ import { URL_SERVER } from '../dataConfig';
 import Cookies from 'js-cookie';
 
 
-export const getAll = async () => {
+export const getAll = async (page,search,address,area,minPrice,maxPrice,utils) => {
     const token = Cookies.get('accessToken');
-
+    const params = {
+        page:page,
+        search: search,
+        address: address,
+        area: area,
+        minPrice: minPrice,
+        maxPrice: maxPrice,
+        utils: utils
+      };
     return await axios.get(`${URL_SERVER}/post/`, {
         withCredentials: true,
 
         headers: {
             token: `Bearer ${token}`,
-        }
+        },
+        params: params,
     })
 }
 export const getOneBySlug = async (slug) => {

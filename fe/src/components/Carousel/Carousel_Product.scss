@@ -6,6 +6,21 @@
     img{
         height: 200px;
     }
+    .btn_detail{
+        background-color: #E66D4F;
+        color: white;
+        padding: 10px 20px;
+        width: 100%;
+        position: absolute;
+        bottom: 30px;
+        left: 0;
+        font-weight: bold;
+    }
+    .btn-favorite{
+        position: absolute;
+        bottom: 80px;
+    }
+
 }
 .Card:hover{
     transform: scale(1.05);
