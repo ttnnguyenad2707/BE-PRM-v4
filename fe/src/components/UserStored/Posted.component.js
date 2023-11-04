@@ -8,7 +8,7 @@ import { LoadingOutlined, } from '@ant-design/icons';
 import TabPane from 'antd/es/tabs/TabPane';
 import Column from 'antd/es/table/Column';
 import { deleteOne, destroyOne, getAllByOwner, getAllDeleted, restoreOne } from '../../services/post.service';
-import { getUser } from '../../services/user.service'
+import { deleteOnInFavorites, getFavorites, getUser } from '../../services/user.service'
 import ColumnGroup from 'antd/es/table/ColumnGroup';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -22,6 +22,7 @@ const Posted = () => {
     const [activeTab, setActiveTab] = useState('1');
     const [postedData, setPostedData] = useState([]);
     const [deletedData, setDeletedData] = useState([]);
+    const [favorites,setFavorites] = useState([])
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [postId, setPostId] = useState('');
     const [userInf, setUserInf] = useState({});
@@ -40,6 +41,10 @@ const Posted = () => {
         } else if (activeTab === "2") {
             const { data } = await getAllDeleted(user._id);
             setDeletedData(data);
+        }
+        else if(activeTab === "3"){
+            const { data } = await getFavorites(user._id);
+            setFavorites(data);
         }
     };
 
@@ -73,6 +78,16 @@ const Posted = () => {
         }
     };
 
+    const handleUnlike = async (id,) =>{
+        if (window.confirm("Bạn muốn bỏ thích bài viết này ?")) {
+            await deleteOnInFavorites(id,user._id);
+            setFavorites(prevData => prevData.filter(post => post._id !== id));
+        }
+    }
+
+    const handleViewPost = async(slug)=> {
+        navigate(`/post/${slug}`);
+    }
     return (
         <div>
             {isLoading ? (<div className='text-center'>
@@ -122,6 +137,8 @@ const Posted = () => {
                                                 <Space size="middle">
                                                     <a className="btn btn-outline-info" onClick={() => handleEdit(record.slug, record)}>Edit</a>
                                                     <a className="btn btn-outline-danger" onClick={() => handleDelete(record._id)}>Delete</a>
+                                                    <a className="btn btn-outline-danger" onClick={() => handleViewPost(record.slug)}>Xem</a>
+
                                                 </Space>
                                             )} />
                                         </ColumnGroup>
@@ -146,6 +163,28 @@ const Posted = () => {
                                                 <Space size="middle">
                                                     <a className="btn btn-outline-info" onClick={() => handleRestore(record._id)}>Restore</a>
                                                     <a className="btn btn-outline-danger" onClick={() => handleDestroy(record._id)}>Destroy</a>
+                                                </Space>
+                                            )} />
+                                        </ColumnGroup>
+                                    </Table>
+                                </TabPane>
+                                <TabPane tab="Bài Viết đã thích" key="3">
+                                    <Table dataSource={favorites}>
+                                        <ColumnGroup>
+                                            <Column
+                                                title="Số thứ tự"
+                                                dataIndex="_index"
+                                                key="_index"
+                                                render={(_, __, index) => index + 1}
+                                            />
+                                            <Column title="Tiêu đề" dataIndex="title" key="title" />
+                                            <Column title="Địa chỉ" dataIndex="address" key="address" />
+                                            <Column title="Giá thuê" dataIndex="price" key="price" />
+                                            <Column title="Số người" dataIndex="maxPeople" key="maxPeople" />
+
+                                            <Column title="Action" key="action" render={(_, record) => (
+                                                <Space size="middle">
+                                                    <a className="btn btn-outline-info" onClick={() => handleUnlike(record._id)}>Bỏ Thích</a>
                                                 </Space>
                                             )} />
                                         </ColumnGroup>

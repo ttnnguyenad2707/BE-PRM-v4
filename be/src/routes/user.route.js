@@ -3,6 +3,7 @@ const UserController=require("../controllers/user.controller")
 const {validatePUT, validatePUTChangePassword}=require('../validations/user.validate');
 const {verifyToken,verifyTokenAdmin}=require("../middlewares/verifyToken.middleware");
 
+router.get('/favorites/:userId',UserController.getFavorite)
 router.get('/:userId',UserController.getOne)
 router.put('/favorites/:id', verifyToken, UserController.addOneFavorite);
 router.put('/favorites/rm/:id', verifyToken, UserController.deleteOneInFavorite);

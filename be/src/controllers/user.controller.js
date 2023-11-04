@@ -15,6 +15,9 @@ module.exports = {
         const user = await UserService.deleteOneInFavorite(req, res);
     }),
 
+    getFavorite: asyncHandler(async (req, res) => {
+        const user = await UserService.getFavorite(req, res);
+    }),
 
 
     updateOne: asyncHandler(async (req, res) => {

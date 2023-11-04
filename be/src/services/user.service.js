@@ -46,6 +46,16 @@ class UserService {
         }
     }
 
+    async getFavorite(req,res){
+        const {userId} = req.params;
+        try {
+            const result = await User.findById(userId).populate('favorites');
+            return res.status(200).json(result.favorites);
+        } catch (error) {
+            return res.status(500).json(error.message)
+        }
+    }
+
     // async updateOne(req, res) {
     //     try {
     //         const result= await User.findByIdAndUpdate({_id:req.params.id},{...req.body});

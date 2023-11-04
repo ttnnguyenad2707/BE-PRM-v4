@@ -105,3 +105,13 @@ export const deleteOnInFavorites = async (id,owner) => {
         }
     })
 }
+
+export const getFavorites = async (owner) => {
+    const token = Cookies.get('accessToken');
+    return await axios.get(`${URL_SERVER}/user/favorites/${owner}`,{
+        withCredentials: true,
+        headers: {
+            token: `Bearer ${token}`,
+        }
+    })
+}
