@@ -14,6 +14,7 @@ import { TiArrowUpOutline } from 'react-icons/ti';
 const Profile = () => {
     // console.log(images.avatarDefault);
     const [user, setUser] = useOutletContext();
+
     const [avatar, setAvatar] = useState();
 
 
@@ -27,6 +28,7 @@ const Profile = () => {
         if (user) {
             setIsLoading(false);
             // console.log("chya vao effect");
+            setAvatar(user.avatar);
         }
 
     }, [user,]);
@@ -44,10 +46,13 @@ const Profile = () => {
     if (user) {
         var userID = user._id
     }
-
+    var avatarURL;
     const handleSubmitForm = async (values) => {
+        console.log(values);
         try {
-            const res = await updateUser(token, userID, values)
+
+            const res = await updateUser(token, userID, {...values,avatar:avatar})
+
             const data = res.data.data
             // console.log("data", data);
             setUser(data)
@@ -72,8 +77,8 @@ const Profile = () => {
                 `https://api.cloudinary.com/v1_1/dmoge1fpo/upload`,
                 formData
             );
-            console.log(response);
-
+            avatarURL = response.data.url;
+            
             setAvatar(response.data.url);
         } catch (error) {
             console.error('Upload error:', error);
@@ -82,11 +87,22 @@ const Profile = () => {
 
     const handleUploadAvatar = (e) => {
         const file = e.target.files[0];
-        console.log(file);
         if (file) {
             uploadToCloudinary(file);
         }
     }
+
+    useEffect(() => {
+        if(isEditMode === true ){
+            document.querySelector('.btn-upload')?.removeAttribute("hidden");
+    
+        }
+        else{
+            document.querySelector('.btn-upload')?.setAttribute("hidden","true");
+    
+        }
+    },[isEditMode])
+    
 
     return (
         <>
@@ -117,6 +133,7 @@ const Profile = () => {
                                                 firstname: user.firstname,
                                                 lastname: user.lastname,
                                                 phone: user.phone,
+                                                avatar: user.avatar,
                                                 // address: '',
                                                 // gender: 'Male',
                                                 // dob: '',
@@ -131,16 +148,15 @@ const Profile = () => {
                                                 <Form>
                                                     <div className='profile-title'>Hồ sơ cá nhân</div>
                                                     <div className='avatar d-flex align-items-center gap-5 mb-4'>
-                                                        <img src={images.avatarDefault} alt='avatar default' />
-                                                        <div className='btn-upload'>
-                                                            <form >
-                                                                <input type='file' id='uploadAvatar' onClick={handleUploadAvatar} />
+                                                        <img className='rounded' width="100px" height="100px" src={avatar == null ? images.avatarDefault : avatar} alt='avatar default' />
+                                                        <div className='btn-upload' hidden>
+                                                            <form>
                                                                 <label htmlFor='uploadAvatar'>
                                                                     <div class='btn btn-bg-primary text-white btn-radius'>Upload file</div>
                                                                 </label>
+                                                                <input name='avatar' hidden onChange={handleUploadAvatar} type='file' id='uploadAvatar'/>
                                                             </form>
                                                         </div>
-                                                        <div className='btn btn-bg-danger text-white btn-radius'>Remove</div>
                                                     </div>
                                                     <div className='form-info'>
                                                         <div className='form-group row align-items-center mb-4'>
