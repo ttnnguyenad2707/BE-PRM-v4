@@ -52,7 +52,12 @@ const Post = new mongoose.Schema({
     type: Date,
     default: null,
   },
-  owner: { type: Schema.Types.ObjectId, ref: 'User' }
+  owner: { type: Schema.Types.ObjectId, ref: 'User' },
+  comment: [{
+    type: mongoose.Schema.ObjectId,
+    ref: 'Comment',
+  }]
+
 }, { timestamps: true });
 
 

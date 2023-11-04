@@ -13,6 +13,12 @@ const ReplySchema = mongoose.Schema({
         default: 0,
     }
 });
+const LikeSchema = mongoose.Schema({
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: "User"
+    }
+})
 const Comment = new mongoose.Schema({
     user: {
         type: mongoose.Schema.ObjectId,
@@ -25,6 +31,9 @@ const Comment = new mongoose.Schema({
     like : {
         type: Number,
         default: 0
+    },
+    likes: {
+        type: [LikeSchema],
     },
     reply: {
         type: [ReplySchema],
