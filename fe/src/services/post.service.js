@@ -81,7 +81,7 @@ export const destroyOne = async (id) => {
 export const restoreOne = async (id) => {
     const token = Cookies.get('accessToken');
 
-    return await axios.put(`${URL_SERVER}/post/rs/${id}`, {
+    return await axios.put(`${URL_SERVER}/post/rs/${id}`, null,{
         withCredentials: true,
 
         headers: {
