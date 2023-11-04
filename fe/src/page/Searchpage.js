@@ -44,9 +44,9 @@ const SearchResultpage = () => {
         console.log(category);
         console.log(address,area,price_min,price_max,utils);
         try {
-            const posts = (await getAll(currentPage,search,address,area,price_min,price_max,utils)).data;
+            const posts = (await getAll(currentPage,search,address,area,price_min,price_max,utils));
             console.log(posts);
-            // setData(posts);
+            setData(posts.data.posts);
         } catch (error) {
 
         }
