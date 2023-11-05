@@ -8,7 +8,7 @@ import { LoadingOutlined, } from '@ant-design/icons';
 import TabPane from 'antd/es/tabs/TabPane';
 import Column from 'antd/es/table/Column';
 import { deleteOne, destroyOne, getAllByOwner, getAllDeleted, restoreOne } from '../../services/post.service';
-import { deleteOnInFavorites, getFavorites, getUser } from '../../services/user.service'
+import { deleteOnInFavorites, getFavorites, getLockList, getUser } from '../../services/user.service'
 import ColumnGroup from 'antd/es/table/ColumnGroup';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -22,7 +22,8 @@ const Posted = () => {
     const [activeTab, setActiveTab] = useState('1');
     const [postedData, setPostedData] = useState([]);
     const [deletedData, setDeletedData] = useState([]);
-    const [favorites,setFavorites] = useState([])
+    const [favorites,setFavorites] = useState([]);
+    const [lockList,setLockList] = useState([]);
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [postId, setPostId] = useState('');
     const [userInf, setUserInf] = useState({});
@@ -45,6 +46,10 @@ const Posted = () => {
         else if(activeTab === "3"){
             const { data } = await getFavorites(user._id);
             setFavorites(data);
+        }
+        else if (activeTab === "4"){
+            const {data} = await getLockList(user._id);
+            setLockList(data)
         }
     };
 
@@ -187,6 +192,25 @@ const Posted = () => {
                                                     <a className="btn btn-outline-info" onClick={() => handleUnlike(record._id)}>Bỏ Thích</a>
                                                 </Space>
                                             )} />
+                                        </ColumnGroup>
+                                    </Table>
+                                </TabPane>
+                                <TabPane tab="Bài Viết đã thích" key="4">
+                                    <Table dataSource={lockList}>
+                                        <ColumnGroup>
+                                            <Column
+                                                title="Số thứ tự"
+                                                dataIndex="_index"
+                                                key="_index"
+                                                render={(_, __, index) => index + 1}
+                                            />
+                                            <Column title="Tiêu đề" dataIndex="title" key="title" />
+                                            <Column title="Địa chỉ" dataIndex="address" key="address" />
+                                            <Column title="Giá thuê" dataIndex="price" key="price" />
+                                            <Column title="Số người" dataIndex="maxPeople" key="maxPeople" />
+                                            <Column title="Lý Do" dataIndex="reason" key="reason" />
+                                                
+                                            
                                         </ColumnGroup>
                                     </Table>
                                 </TabPane>
