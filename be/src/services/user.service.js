@@ -18,7 +18,7 @@ class UserService {
                 return res.status(200).json({ ...other });
             }
             const result = await User.findById(userId);
-            const { password, refreshToken, admin, ...other } = result;
+            const { password, refreshToken, admin, ...other } = result._doc;
             return res.status(200).json({ ...other });
         } catch (error) {
             return res.status(500).json({ "error": error.message });

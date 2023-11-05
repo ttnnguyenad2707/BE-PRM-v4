@@ -139,12 +139,8 @@ class PostService {
 
     async updateOne(req, res) {
         const { id } = req.params;
-        const images = req.files.map(file => ({
-            url: `/public/images/${file.filename}`,
-            caption: `Caption for ${file.originalname}`,
-        }));
         try {
-            const result = await Post.findByIdAndUpdate(id, { images, ...req.body });
+            const result = await Post.findByIdAndUpdate(id, {...req.body });
             if (!result) {
                 return res.status(404).json({ error: 'Bài viết không tồn tại.' });
             }
@@ -168,6 +164,21 @@ class PostService {
         const { owner } = req.params;
         try {
             const results = await Post.find({ owner: owner, deleted: true })
+                .populate('categories')
+                .populate('security')
+                .populate('utils')
+                .populate('interiors')
+                .populate('owner');
+                
+            return res.status(200).json(results)
+        } catch (error) {
+            return res.status(500).json(error.message)
+        }
+    }
+    async getAllBock(req, res) {
+        const { owner } = req.params;
+        try {
+            const results = await Post.find({ owner: owner, isLock: true })
                 .populate('categories')
                 .populate('security')
                 .populate('utils')

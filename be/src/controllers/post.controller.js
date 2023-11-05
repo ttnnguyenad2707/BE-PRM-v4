@@ -47,5 +47,8 @@ module.exports = {
     likeComment: asyncHandler(async (req, res) => {
         await PostService.likeComment(req, res);
     }),
+    getAllBock: asyncHandler(async (req, res) => {
+        await PostService.getAllBock(req, res);
+    }),
 
 };

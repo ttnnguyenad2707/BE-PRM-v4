@@ -52,6 +52,10 @@ const Post = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  reason:{
+    type:String,
+    default:null
+  },
   deletedAt: {
     type: Date,
     default: null,
