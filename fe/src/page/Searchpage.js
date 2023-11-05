@@ -2,7 +2,7 @@ import Footer from "../components/Footer/Footer.js";
 import Searchresult from "../components/Bodysearch/Bodysearch.js";
 import { useLocation,useOutletContext } from 'react-router-dom';
 import { useEffect, useState } from "react";
-import { searchPost,getPostfilter,getAllPost,getAll } from "../services/post.service.js";
+import { searchPost,getAll } from "../services/post.service.js";
 import { deleteOnInFavorites,addFavorite  } from "../services/user.service.js";
 const SearchResultpage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -22,13 +22,11 @@ const SearchResultpage = () => {
     const checkNext = () =>{
         setCurrentPage(currentPage +1)
     }
-    console.log(currentPage);
     const getDataSearch = async () => {
         try {
             const posts = (await searchPost(value,currentPage)).data.data;
             setData(posts.data);
             setTotalPages(posts.totalPages)
-            console.log(posts.data);
         } catch (error) {
 
         }
@@ -41,11 +39,8 @@ const SearchResultpage = () => {
         const price_max = category[2].price_max
         const utils = category[3].amenities
         const search = category[5].searchValue;
-        console.log(category);
-        console.log(address,area,price_min,price_max,utils);
         try {
             const posts = (await getAll(currentPage,search,address,area,price_min,price_max,utils));
-            console.log(posts);
             setData(posts.data.posts);
         } catch (error) {
 
@@ -55,7 +50,6 @@ const SearchResultpage = () => {
     const getData = async () => {
         try {
             const posts = await getAll(currentPage);
-            console.log(posts);
             setData(posts.data.posts);
             setTotalPages(posts.data.totalPages)
         } catch (error) {
@@ -83,10 +77,10 @@ const SearchResultpage = () => {
         else if(category!=null){
             getDatafilter();
         }
-        else if(listpage!=null && listpage == 'list page'){
+        else if(listpage!==null && listpage === 'list page'){
             getData();
         }
-        else if(listpage!=null && listpage == 'favorite page'){
+        else if(listpage!==null && listpage === 'favorite page'){
             getData();
         }
     },[currentPage, value, category,listpage])

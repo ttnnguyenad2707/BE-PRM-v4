@@ -554,7 +554,6 @@ const CreatePostPage = () => {
                                                         onChange={(event, values) => {
                                                             const selectedValues = values.map(item => item._id);
                                                             form.setFieldValue('utils', selectedValues);
-                                                            // form.setFieldValue('utils', values); khi mà muốn lấy dưới dạng obj 
 
                                                         }}
                                                     />
@@ -562,17 +561,9 @@ const CreatePostPage = () => {
                                             )}
                                         </Field></div>
                                     </div>
-
-
-
-
-
                                     <div className="my-2">
                                         <button className="btn btn-success form-control" type="submit">Submit</button>
                                     </div>
-
-
-
                                 </div>
                             </div>
                         </Form>

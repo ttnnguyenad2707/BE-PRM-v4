@@ -20,7 +20,7 @@ const PostCard = ({post,users,favorites,checkclick,}) => {
                 width: '95%',
                 minHeight: '480px'
             }}
-            cover={<img alt="example" src={post.images[0].url} />}
+            cover={<img alt="example" src={post.images[0].url} style={{height:"200px"}}/>}
         >
             <div className='d-flex flex-column gap-2'>
                 <h6 className='d-flex gap-2'>

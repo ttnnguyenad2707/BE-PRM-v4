@@ -17,11 +17,11 @@ import { io } from "socket.io-client";
 import Cookies from "js-cookie";
 function formatCurrency(number) {
     return number.toLocaleString('vi-VN', {
-      style: 'currency',
-      currency: 'VND',
-      minimumFractionDigits: 0,
+        style: 'currency',
+        currency: 'VND',
+        minimumFractionDigits: 0,
     });
-  }
+}
 const socket = io('http://localhost:5000');
 const PostDetails = () => {
     const token = Cookies.get('accessToken');
@@ -129,8 +129,6 @@ const PostDetails = () => {
             addComment({ postId: postDetail._id, content })
                 .then((data) => {
                     toast(data.data.message);
-                    // Thêm comment mới vào danh sách comment
-                    // setComments([...comments, data.data.data]);
                     socket.emit('comment', data.data.data);
                 })
                 .catch((error) => toast(error));
@@ -193,7 +191,6 @@ const PostDetails = () => {
                 return comment;
             })
 
-            // setComments(updateComment)
             socket.emit('reply', updateComment)
         }).catch(error => toast(error))
         e.target.commentReply.value = ''
@@ -210,7 +207,7 @@ const PostDetails = () => {
                                 <div className='post-slide'>
                                     <Slider {...settings}>
                                         {postDetail?.images?.map(image => (
-                                            <div style={{ height: '300px' ,width:'200px'}}>
+                                            <div style={{ height: '300px', width: '200px' }}>
                                                 <img src={image.url} alt='post-image' width="100%" height="700px" />
                                             </div>
                                         ))}
@@ -249,7 +246,6 @@ const PostDetails = () => {
                                 </div>
                                 <div className='room-address'>
                                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.7330253564114!2d105.51734237479548!3d21.00333628865218!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31365730731c760b%3A0x6b107bdf681c16ac!2sThi%C3%AAn%20Long%20Building!5e0!3m2!1svi!2s!4v1697290825634!5m2!1svi!2s" width="100%" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                                    {/* <MapContainer address="Hưng Yên" /> */}
                                 </div>
                                 <div className='post-comment'>
                                     <h4>Bình Luận or Đánh giá</h4>
@@ -345,23 +341,17 @@ const PostDetails = () => {
 
                                                                     )
                                                                 }
-
-
                                                             }
                                                             else {
-                                                                return (<div></div>)
+                                                                return (<div>Loading...</div>)
                                                             }
                                                         })}
-
-
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
-
                             </div>
                         </div>
                         <div className='col'>

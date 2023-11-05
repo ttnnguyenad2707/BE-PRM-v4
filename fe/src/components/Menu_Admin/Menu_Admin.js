@@ -40,6 +40,18 @@ const Menuadmin = () => {
         else if(subActive == 'sub2'){
             navigate('/admin/account');
         }
+        else if(subActive == 'sub3'){
+            navigate('/admin/categories');
+        }
+        else if(subActive == 'sub4'){
+            navigate('/admin/security');
+        }
+        else if(subActive == 'sub5'){
+            navigate('/admin/interiors');
+        }
+        else if(subActive == 'sub6'){
+            navigate('/admin/utils');
+        }
     };
     return (
         <div className='menu_admin'>

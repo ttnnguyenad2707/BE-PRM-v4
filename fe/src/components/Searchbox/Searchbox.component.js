@@ -58,20 +58,16 @@ const Searchbox = ({ datalocation }) => {
     { value: 'Máy giặt', label: 'Máy giặt' }
   ];
   const handleChange_location = (value) => {
-    console.log(`selected ${value}`);
     setLocation(value);
   };
 
   const handleChange_price_min = (value) => {
-    console.log(`selected ${value}`);
     setPriceMin(value);
   };
   const handleChange_price_max = (value) => {
-    console.log(`selected ${value}`);
     setPriceMax(value);
   };
   const handleChange_area = (value) => {
-    console.log(`selected ${value}`);
     setArea(value);
   };
 
@@ -150,26 +146,26 @@ const Searchbox = ({ datalocation }) => {
             />
           </div>
           <div className='select-option d-flex column-gap-2'>
-            <Select
+            <Input
               mode="multiple"
               allowClear
               style={{
                 width: '50%',
               }}
               placeholder="Giá Tiền Thấp Nhất"
-              onSelect={handleChange_price_min}
-              options={optionsPricemin}
+              // onSelect={handleChange_price_min}
+              // options={optionsPricemin}
             />
             /
-            <Select
+            <Input
               mode="multiple"
               allowClear
               style={{
                 width: '50%',
               }}
               placeholder="Giá Tiền Cao Nhất"
-              onSelect={handleChange_price_max}
-              options={optionsPricemax}
+              // onSelect={handleChange_price_max}
+              // options={optionsPricemax}
             />
           </div>
           <div className='select-option d-flex column-gap-2'>
