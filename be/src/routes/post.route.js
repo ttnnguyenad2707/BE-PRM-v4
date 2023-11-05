@@ -18,7 +18,7 @@ router.post('/comment/:commentId/reply',verifyToken,PostController.replyComment)
 router.post('/:postId/comment',verifyToken,PostController.addCommentToPost);
 router.get('/:postId/comment',PostController.getCommentOfPost)
 router.put('/comment/like',verifyToken,PostController.likeComment)
-router.get('/:userId/block',verifyToken,PostController.getAllBock)
+router.get('/:owner/block',verifyToken,PostController.getAllBock)
 
 
 
