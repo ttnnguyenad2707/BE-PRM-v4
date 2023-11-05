@@ -115,3 +115,13 @@ export const getFavorites = async (owner) => {
         }
     })
 }
+
+export const getLockList = async (owner) => {
+    const token = Cookies.get('accessToken');
+    return await axios.get(`${URL_SERVER}/post/${owner}/block/`,{
+        withCredentials: true,
+        headers: {
+            token: `Bearer ${token}`,
+        }
+    })
+}
